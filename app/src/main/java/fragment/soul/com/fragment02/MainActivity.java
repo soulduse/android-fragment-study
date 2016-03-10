@@ -1,13 +1,13 @@
 package fragment.soul.com.fragment02;
 
-import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements OnBackStackChangedListener {
-
+public class MainActivity extends Activity implements FragmentManager.OnBackStackChangedListener {
+	private static final String TAG = "soul >> ";
 	TextViewerFragment  mTextViewerFragment = null;
 	ImageViewerFragment mImageViewerFragment = null;
 
@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements OnBackStackChange
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-
+		printLog("Activity onCreate");
 		// ① 액티비티 레이아웃 우측에 나타날 수 있는 뷰어 프래그먼트를 미리 추가하고,
 		//    당장 보여지지 말아야 할 추가한 프래그먼트는 감춘다.
 		// ====================================================================
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements OnBackStackChange
 		mImageViewerFragment = ImageViewerFragment.newInstance();
 
 
-		getSupportFragmentManager()
+		getFragmentManager()
 				.beginTransaction()
 				.add(R.id.viewer_fragment_container, mTextViewerFragment, "TEXT_VIEWER")
 				.add(R.id.viewer_fragment_container, mImageViewerFragment, "IMAGE_VIEWER")
@@ -42,16 +42,16 @@ public class MainActivity extends AppCompatActivity implements OnBackStackChange
 					public void onItemClick( int itemType )
 					{
 						TextViewerFragment textViewerFragment =
-								(TextViewerFragment)getSupportFragmentManager().findFragmentByTag("TEXT_VIEWER");
+								(TextViewerFragment)getFragmentManager().findFragmentByTag("TEXT_VIEWER");
 						ImageViewerFragment imageViewerFragment =
-								(ImageViewerFragment)getSupportFragmentManager().findFragmentByTag("IMAGE_VIEWER");
+								(ImageViewerFragment)getFragmentManager().findFragmentByTag("IMAGE_VIEWER");
 
 						// ② 당장 보여져야 할 프래그먼트는 show 하고, 보이지 말아야 할
 						//    프래그먼트는 hide 한다.
 						// =============================================================
 						if( itemType == ListMenuFragment.ITEM_TYPE_TEXT_VIEWER && mImageViewerFragment.isVisible())
 						{
-							getSupportFragmentManager()
+							getFragmentManager()
 									.beginTransaction()
 									.hide(mImageViewerFragment)
 									.show( mTextViewerFragment )
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnBackStackChange
 						}
 						else if( itemType == ListMenuFragment.ITEM_TYPE_IMAGE_VIEWER && mTextViewerFragment.isVisible())
 						{
-							getSupportFragmentManager()
+							getFragmentManager()
 									.beginTransaction()
 									.hide( mTextViewerFragment )
 									.show( mImageViewerFragment )
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnBackStackChange
 					}
 				});
 
-		getSupportFragmentManager().addOnBackStackChangedListener(this);
+		getFragmentManager().addOnBackStackChangedListener(this);
 	}
 
 	@Override
@@ -80,15 +80,49 @@ public class MainActivity extends AppCompatActivity implements OnBackStackChange
 		Toast.makeText(getApplicationContext(),
 				"Changed BackStack \n"+
 				"BackStack Entry Count : "+
-				getSupportFragmentManager().getBackStackEntryCount(),
+				getFragmentManager().getBackStackEntryCount(),
 				Toast.LENGTH_LONG).show();
 	}
 
-	//<editor-fold desc="Description">
 	@Override
-	//</editor-fold>
+	protected void onStart() {
+		printLog("Activity onStart");
+		super.onStart();
+	}
+
+	@Override
+	protected void onRestart() {
+		printLog("Activity onStart");
+		super.onRestart();
+	}
+
+	@Override
+	protected void onResume() {
+		printLog("Activity onResume");
+		super.onResume();
+	}
+
+	@Override
+	protected void onStop() {
+		printLog("Activity onStop");
+		super.onStop();
+	}
+
+	@Override
+	protected void onPause() {
+		printLog("Activity onPause");
+		super.onPause();
+	}
+
+	@Override
 	protected void onDestroy() {
-		getSupportFragmentManager().removeOnBackStackChangedListener(this);
+		printLog("Activity onDestroy");
+		getFragmentManager().removeOnBackStackChangedListener(this);
 		super.onDestroy();
+	}
+
+
+	private void printLog(String message){
+		Log.d(TAG, message);
 	}
 }
