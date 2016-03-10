@@ -23,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
 		getFragmentManager()
 				.beginTransaction()
-				.add(R.id.viewer_fragment_container, mTextViewerFragment)
-				.add(R.id.viewer_fragment_container, mImageViewerFragment)
-				.hide( mImageViewerFragment )
+				.add(R.id.viewer_fragment_container, mTextViewerFragment, "TEXT_VIEWER")
+				.add(R.id.viewer_fragment_container, mImageViewerFragment, "IMAGE_VIEWER")
+				.hide(mImageViewerFragment)
 				.commit();
 		// ====================================================================
 
@@ -38,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 					@Override
 					public void onItemClick( int itemType )
 					{
+						TextViewerFragment textViewerFragment =
+								(TextViewerFragment)getFragmentManager().findFragmentByTag("TEXT_VIEWER");
+						ImageViewerFragment imageViewerFragment =
+								(ImageViewerFragment)getFragmentManager().findFragmentByTag("IMAGE_VIEWER");
+
 						// ② 당장 보여져야 할 프래그먼트는 show 하고, 보이지 말아야 할
 						//    프래그먼트는 hide 한다.
 						// =============================================================
