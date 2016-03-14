@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements FragmentManager.OnBackStac
 				.beginTransaction()
 				.add(R.id.viewer_fragment_container, mTextViewerFragment, "TEXT_VIEWER")
 				.add(R.id.viewer_fragment_container, mImageViewerFragment, "IMAGE_VIEWER")
-				.hide(mImageViewerFragment)
+				.remove(mImageViewerFragment)
 				.commit();
 		// ====================================================================
 
@@ -53,9 +53,14 @@ public class MainActivity extends Activity implements FragmentManager.OnBackStac
 						{
 							getFragmentManager()
 									.beginTransaction()
-									.hide(mImageViewerFragment)
-									.show( mTextViewerFragment )
-									.addToBackStack("TEXT_VIEWER_BACKSTACK")
+//									.replace(R.id.viewer_fragment_container, textViewerFragment)
+									.remove(imageViewerFragment)
+									.add(R.id.viewer_fragment_container, textViewerFragment)
+//									.detach(imageViewerFragment)
+//									.attach(textViewerFragment)
+//									.hide(mImageViewerFragment)
+//									.show( mTextViewerFragment )
+//									.addToBackStack("TEXT_VIEWER_BACKSTACK")
 									.commit();
 
 						}
@@ -63,9 +68,11 @@ public class MainActivity extends Activity implements FragmentManager.OnBackStac
 						{
 							getFragmentManager()
 									.beginTransaction()
-									.hide( mTextViewerFragment )
-									.show( mImageViewerFragment )
-									.addToBackStack("IMAGE_VIEWER_BACKSTACK")
+									.remove(textViewerFragment)
+									.add(R.id.viewer_fragment_container, imageViewerFragment)
+//									.hide( mTextViewerFragment )
+//									.show( mImageViewerFragment )
+//									.addToBackStack("IMAGE_VIEWER_BACKSTACK")
 									.commit();
 						}
 						//=============================================================
