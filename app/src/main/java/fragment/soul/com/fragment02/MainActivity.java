@@ -24,13 +24,20 @@ public class MainActivity extends Activity implements FragmentManager.OnBackStac
 		mImageViewerFragment = ImageViewerFragment.newInstance();
 
 
-		getFragmentManager()
-				.beginTransaction()
-				.add(R.id.viewer_fragment_container, mTextViewerFragment, "TEXT_VIEWER")
-				.add(R.id.viewer_fragment_container, mImageViewerFragment, "IMAGE_VIEWER")
-				.remove(mImageViewerFragment)
-				.commit();
-		// ====================================================================
+		if(savedInstanceState == null){
+			getFragmentManager()
+					.beginTransaction()
+					.add(R.id.viewer_fragment_container,
+							mTextViewerFragment)
+					.commit();
+		}
+//		getFragmentManager()
+//				.beginTransaction()
+//				.add(R.id.viewer_fragment_container, mTextViewerFragment, "TEXT_VIEWER")
+//				.add(R.id.viewer_fragment_container, mImageViewerFragment, "IMAGE_VIEWER")
+//				.remove(mImageViewerFragment)
+//				.commit();
+//		// ====================================================================
 
 		ListMenuFragment listMenuFragment = (ListMenuFragment)
 				getFragmentManager().findFragmentById( R.id.menu_fragment );
@@ -41,21 +48,21 @@ public class MainActivity extends Activity implements FragmentManager.OnBackStac
 					@Override
 					public void onItemClick( int itemType )
 					{
-						TextViewerFragment textViewerFragment =
-								(TextViewerFragment)getFragmentManager().findFragmentByTag("TEXT_VIEWER");
-						ImageViewerFragment imageViewerFragment =
-								(ImageViewerFragment)getFragmentManager().findFragmentByTag("IMAGE_VIEWER");
+//						TextViewerFragment textViewerFragment =
+//								(TextViewerFragment)getFragmentManager().findFragmentByTag("TEXT_VIEWER");
+//						ImageViewerFragment imageViewerFragment =
+//								(ImageViewerFragment)getFragmentManager().findFragmentByTag("IMAGE_VIEWER");
 
 						// ② 당장 보여져야 할 프래그먼트는 show 하고, 보이지 말아야 할
 						//    프래그먼트는 hide 한다.
 						// =============================================================
-						if( itemType == ListMenuFragment.ITEM_TYPE_TEXT_VIEWER && mImageViewerFragment.isVisible())
+						if( itemType == ListMenuFragment.ITEM_TYPE_TEXT_VIEWER && mTextViewerFragment.isVisible() == false)
 						{
 							getFragmentManager()
 									.beginTransaction()
-//									.replace(R.id.viewer_fragment_container, textViewerFragment)
-									.remove(imageViewerFragment)
-									.add(R.id.viewer_fragment_container, textViewerFragment)
+									.replace(R.id.viewer_fragment_container, mTextViewerFragment)
+//									.remove(mImageViewerFragment)
+//									.add(R.id.viewer_fragment_container, mTextViewerFragment)
 //									.detach(imageViewerFragment)
 //									.attach(textViewerFragment)
 //									.hide(mImageViewerFragment)
@@ -64,12 +71,13 @@ public class MainActivity extends Activity implements FragmentManager.OnBackStac
 									.commit();
 
 						}
-						else if( itemType == ListMenuFragment.ITEM_TYPE_IMAGE_VIEWER && mTextViewerFragment.isVisible())
+						else if( itemType == ListMenuFragment.ITEM_TYPE_IMAGE_VIEWER && mImageViewerFragment.isVisible() == false)
 						{
 							getFragmentManager()
 									.beginTransaction()
-									.remove(textViewerFragment)
-									.add(R.id.viewer_fragment_container, imageViewerFragment)
+//									.remove(mTextViewerFragment)
+//									.add(R.id.viewer_fragment_container, mImageViewerFragment)
+									.replace(R.id.viewer_fragment_container, mImageViewerFragment)
 //									.hide( mTextViewerFragment )
 //									.show( mImageViewerFragment )
 //									.addToBackStack("IMAGE_VIEWER_BACKSTACK")
